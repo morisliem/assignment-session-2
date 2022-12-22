@@ -1,0 +1,267 @@
+basePath: /api/v1
+definitions:
+  controllers.PingSwag:
+    properties:
+      health:
+        example: ok
+        type: string
+    type: object
+  request.CreateTodo:
+    properties:
+      desc:
+        example: Desc Todo
+        type: string
+      title:
+        example: Title Todo
+        type: string
+    type: object
+  request.UpdateTodo:
+    properties:
+      desc:
+        example: Desc Todo
+        type: string
+      title:
+        example: Title Todo
+        type: string
+    type: object
+  view.CreateTodoFailedRespSwag:
+    properties:
+      error: {}
+      message:
+        example: failed
+        type: string
+      status:
+        example: 500
+        type: integer
+    type: object
+  view.CreateTodoSuccessRespSwag:
+    properties:
+      message:
+        example: created
+        type: string
+      status:
+        example: 201
+        type: integer
+    type: object
+  view.DefaultError:
+    properties:
+      error:
+        type: string
+      message:
+        example: error
+        type: string
+      status:
+        example: 400
+        type: integer
+    type: object
+  view.DefaultSuccess:
+    properties:
+      message:
+        example: success
+        type: string
+      status:
+        example: 200
+        type: integer
+    type: object
+  view.GetTodo:
+    properties:
+      created_at:
+        type: string
+      desc:
+        example: Desc Todo
+        type: string
+      id:
+        example: 1
+        type: integer
+      title:
+        example: Title Todo
+        type: string
+    type: object
+  view.GetTodoSuccessSwag:
+    properties:
+      message:
+        type: string
+      payload:
+        $ref: '#/definitions/view.GetTodo'
+      status:
+        type: integer
+    type: object
+  view.GetTodosSuccessSwag:
+    properties:
+      message:
+        type: string
+      payload:
+        items:
+          $ref: '#/definitions/view.GetTodo'
+        type: array
+      status:
+        type: integer
+    type: object
+host: localhost:4444
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server celler server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Example API
+  version: "1.0"
+paths:
+  /ping:
+    get:
+      consumes:
+      - application/json
+      description: do ping
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.PingSwag'
+      summary: ping example
+      tags:
+      - Health
+  /todos:
+    get:
+      consumes:
+      - application/json
+      description: Get all todos
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/view.GetTodosSuccessSwag'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/view.DefaultError'
+      summary: Get TODOs
+      tags:
+      - TODOs
+    post:
+      consumes:
+      - application/json
+      description: create todo
+      parameters:
+      - description: Request Body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateTodo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/view.CreateTodoSuccessRespSwag'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/view.CreateTodoFailedRespSwag'
+      summary: Create TODO
+      tags:
+      - TODOs
+  /todos/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete todo by ID
+      parameters:
+      - description: Todo ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/view.DefaultSuccess'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/view.DefaultError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/view.DefaultError'
+      summary: Delete todo by ID
+      tags:
+      - TODOs
+    get:
+      consumes:
+      - application/json
+      description: Get todo by ID
+      parameters:
+      - description: Todo ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/view.GetTodoSuccessSwag'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/view.DefaultError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/view.DefaultError'
+      summary: Get todo by ID
+      tags:
+      - TODOs
+    put:
+      consumes:
+      - application/json
+      description: Update todo by ID
+      parameters:
+      - description: Todo ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Request Body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdateTodo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/view.DefaultSuccess'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/view.DefaultError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/view.DefaultError'
+      summary: Update todo by ID
+      tags:
+      - TODOs
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"
